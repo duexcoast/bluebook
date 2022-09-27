@@ -29,4 +29,14 @@ export class UsersController {
   findAllUsers(@Query('email') email: string) {
     return this.usersService.find(email);
   }
+
+  @Delete('/:id')
+  removeUser(@Param('id') id: string) {
+    return this.usersService.remove(parseInt(id));
+  }
+
+  @Patch('/:id')
+  updateUser(@Param('id') id: string, @Body() attr:) {
+    return this.usersService.update(parseInt(id, attr));
+  }
 }
