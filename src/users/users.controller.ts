@@ -10,23 +10,51 @@ import {
   NotFoundException,
   UseInterceptors,
   ClassSerializerInterceptor,
+  HttpCode,
+  HttpStatus,
+  BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
+import { AuthService } from './auth.service';
+import { QueryFailedError } from 'typeorm';
 
+@Serialize(UserDto)
 @Controller('auth')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body.email, body.password);
+  // @HttpCode(HttpStatus.CREATED)
+  async createUser(@Body() body: CreateUserDto): Promise<User> {
+    // this.authService.signup(body.email, body.password)
+    try {
+      const user: User = await this.authService.signup(
+        body.email,
+        body.password,
+      );
+      return user;
+    } catch (err) {
+      if (
+        err instanceof QueryFailedError &&
+        // this is specific to sqlite - will have to change when
+        // migrating to postgres
+        err.message.includes('UNIQUE constraint failed')
+      ) {
+        throw new BadRequestException('email already in use');
+      }
+      // throw a general error if it's a diff type of err
+      throw new HttpException(err.message);
+    }
   }
 
-  @Serialize(UserDto)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     console.log('handler is running');

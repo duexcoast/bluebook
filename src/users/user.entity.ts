@@ -13,8 +13,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  email: string;
+  @Column({ unique: true })
+  email!: string;
 
   @Column()
   @Exclude()
