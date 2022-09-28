@@ -33,13 +33,10 @@ export class UsersController {
 
   @Post('/signup')
   // @HttpCode(HttpStatus.CREATED)
-  async createUser(@Body() body: CreateUserDto): Promise<User> {
+  async createUser(@Body() body: CreateUserDto) {
     // this.authService.signup(body.email, body.password)
     try {
-      const user: User = await this.authService.signup(
-        body.email,
-        body.password,
-      );
+      const user = await this.authService.signup(body.email, body.password);
       return user;
     } catch (err) {
       if (
@@ -51,7 +48,7 @@ export class UsersController {
         throw new BadRequestException('email already in use');
       }
       // throw a general error if it's a diff type of err
-      throw new HttpException(err.message);
+      throw err;
     }
   }
 
