@@ -21,10 +21,20 @@ describe('Authentication System (e2e)', () => {
       .post('/auth/signup')
       .send({ email: uniqueEmail, password: 'password' })
       .expect(201)
-      .then((res) => { 
+      .then((res) => {
         const { id, email } = res.body;
-        expect(id).toBeDefined();
-        expect(email).toEqual(uniqueEmail);
       });
+  });
+
+  it('signup as a new user then get the currently logged in user', async () => {
+    const cookie = await global.getAuthCookie(app);
+
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie)
+      .send()
+      .expect(200);
+
+    expect(body.email).toEqual('test@test.com');
   });
 });

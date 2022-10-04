@@ -46,3 +46,18 @@ GET http://localhost:3000/auth/colors/purple
 
 ### Get color property on session object
 GET http://localhost:3000/auth/colors
+
+### Create a vehicle report
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+    "make": "Ford",
+    "model": "Ranger",
+    "year": 2004,
+    "mileage": 130000,
+    "lng": -75.165222,
+    "lat": 39.952583,
+    "price": 1500
+
+}
