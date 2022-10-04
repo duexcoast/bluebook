@@ -52,12 +52,20 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-    "make": "Ford",
-    "model": "Ranger",
+    "make": "Kia",
+    "model": "Sorento",
     "year": 2004,
     "mileage": 130000,
     "lng": -75.165222,
     "lat": 39.952583,
     "price": 1500
 
+}
+
+### Approve a vehicle report
+PATCH http://localhost:3000/reports/6
+Content-Type: application/json
+
+{
+    "approved": true
 }
