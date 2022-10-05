@@ -71,4 +71,4 @@ Content-Type: application/json
 }
 
 ### Get an estimate for an existing vehicle
-GET http://localhost:3000/reports?make=ford&model=ranger&lat=0&lng=0&mileage=130000&year=2002
+GET http://localhost:3000/reports?make=Ford&model=ranger&lat=0&lng=0&mileage=130000&year=2002

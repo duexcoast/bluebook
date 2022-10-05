@@ -6,6 +6,9 @@ export class ReportDto {
   id: number;
 
   @Expose()
+  approved: boolean;
+
+  @Expose()
   price: number;
 
   @Expose()
@@ -25,9 +28,6 @@ export class ReportDto {
 
   @Expose()
   mileage: number;
-
-  @Expose()
-  approved: boolean;
 
   @Expose()
   @Type(() => UserDto)

@@ -70,10 +70,10 @@ export class UsersController {
   }
 
   @Get('/:id')
-  async findUser(@Param('id') id: string) {
+  async findUser(@Param('id') id: number) {
     console.log('handler is running');
 
-    const user = await this.usersService.findOne(parseInt(id));
+    const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -86,12 +86,12 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  removeUser(@Param('id') id: string) {
-    return this.usersService.remove(parseInt(id));
+  removeUser(@Param('id') id: number) {
+    return this.usersService.remove(id);
   }
 
   @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.usersService.update(parseInt(id), body);
+  updateUser(@Param('id') id: number, @Body() body: UpdateUserDto) {
+    return this.usersService.update(id, body);
   }
 }

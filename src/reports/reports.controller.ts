@@ -25,7 +25,7 @@ export class ReportsController {
 
   @Get()
   getEstimate(@Query() query: GetEstimateDto) {
-    console.log(query);
+    return this.reportsService.createEstimate(query);
   }
 
   @Post()
@@ -37,7 +37,7 @@ export class ReportsController {
 
   @Patch('/:id')
   @UseGuards(AdminGuard)
-  approveReport(@Param('id') id: string, @Body() body: ApprovedReportDto) {
-    return this.reportsService.changeApproval(parseInt(id), body.approved);
+  approveReport(@Param('id') id: number, @Body() body: ApprovedReportDto) {
+    return this.reportsService.changeApproval(id, body.approved);
   }
 }

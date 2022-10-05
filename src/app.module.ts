@@ -41,7 +41,7 @@ const cookieSession = require('cookie-session');
           enableImplicitConversion: true,
         },
         whitelist: true,
-        stopAtFirstError: true
+        stopAtFirstError: true,
       }),
     },
   ],
