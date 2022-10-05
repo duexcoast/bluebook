@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Report } from '../reports/reports.entity';
-import { report } from 'process';
 
 @Entity()
 export class User {
@@ -25,7 +24,7 @@ export class User {
 
   @Column({ default: true })
   admin: boolean;
-  
+
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
 
