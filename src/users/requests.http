@@ -52,18 +52,18 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-    "make": "Kia",
-    "model": "Sorento",
-    "year": 2004,
-    "mileage": 130000,
-    "lng": -75.165222,
-    "lat": 39.952583,
-    "price": 1500
+    "make": "Ford",
+    "model": "Mustang",
+    "year": 1984,
+    "mileage": 120000,
+    "lng": 45,
+    "lat": 45,
+    "price": 30000
 
 }
 
 ### Approve a vehicle report
-PATCH http://localhost:3000/reports/6
+PATCH http://localhost:3000/reports/10
 Content-Type: application/json
 
 {
@@ -71,4 +71,4 @@ Content-Type: application/json
 }
 
 ### Get an estimate for an existing vehicle
-GET http://localhost:3000/reports?make=Ford&model=ranger&lat=0&lng=0&mileage=130000&year=2002
+GET http://localhost:3000/reports?make=Ford&model=Mustang&lat=45&lng=45&mileage=130000&year=1984
