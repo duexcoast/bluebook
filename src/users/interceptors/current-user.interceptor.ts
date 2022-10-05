@@ -11,8 +11,8 @@ import { UsersService } from '../users.service';
 export class CurrentUserInterceptor implements NestInterceptor {
   constructor(private usersService: UsersService) {}
 
-  async intercept(ctx: ExecutionContext, handler: CallHandler) {
-    const request = ctx.switchToHttp().getRequest();
+  async intercept(context: ExecutionContext, handler: CallHandler) {
+    const request = context.switchToHttp().getRequest();
     const { userId } = request.session || {};
 
     if (userId) {
