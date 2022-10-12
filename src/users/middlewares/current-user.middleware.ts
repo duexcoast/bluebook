@@ -1,9 +1,10 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../user.entity';
+
+import { User } from '@prisma/client';
 import { UsersService } from '../users.service';
 
-// This is adding currentUser a property 
+// This is adding currentUser a property
 // on the Express Request interface (optional)
 // and we're deifning the type as a User Entity instance
 declare global {

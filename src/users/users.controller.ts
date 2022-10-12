@@ -12,6 +12,7 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
+
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
@@ -20,7 +21,7 @@ import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { QueryFailedError } from 'typeorm';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from './user.entity';
+import { User } from '@prisma/client';
 import { AuthGuard } from '../guards/auth.guard';
 
 @Serialize(UserDto)
@@ -82,7 +83,7 @@ export class UsersController {
 
   @Get()
   findAllUsers(@Query('email') email: string) {
-    return this.usersService.find(email);
+    return this.usersService.findByEmailOrThrow(email);
   }
 
   @Delete('/:id')

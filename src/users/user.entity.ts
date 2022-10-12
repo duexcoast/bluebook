@@ -1,45 +1,24 @@
-import {
-  AfterInsert,
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  AfterUpdate,
-  AfterRemove,
-  OneToMany,
-} from 'typeorm';
+import { IsDefined, IsEmail, IsBoolean } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { Report } from '../reports/reports.entity';
+import { ReportEntity } from '../reports/reports.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
+export class UserEntity implements User {
+  @ApiProperty()
   id: number;
 
-  @Column({ unique: true })
+  @ApiProperty()
+  @IsEmail()
   email!: string;
 
-  @Column()
+  @ApiProperty()
   @Exclude()
   password: string;
 
-  @Column({ default: true })
+  @ApiProperty()
   admin: boolean;
 
-  @OneToMany(() => Report, (report) => report.user)
-  reports: Report[];
-
-  @AfterInsert()
-  logInsert() {
-    console.log('Inserted User with id', this.id);
-  }
-
-  @AfterUpdate()
-  logUpdate() {
-    console.log('Updated User with id', this.id);
-  }
-
-  @AfterRemove()
-  logRemove() {
-    console.log('Removed User with id', this.id);
-  }
+  @ApiProperty()
+  reports: ReportEntity[];
 }

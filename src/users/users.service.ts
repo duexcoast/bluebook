@@ -1,43 +1,57 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+// import { User } from './user.entity';
+import { PrismaService } from '../prisma/prisma.service';
+import { User, Prisma } from '@prisma/client';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(private prisma: PrismaService) {}
 
   create(email: string, password: string) {
-    const user = this.repo.create({ email, password });
-
-    return this.repo.save(user);
+    return this.prisma.user.create({ data: { email, password } });
   }
 
   findOne(id: number) {
     if (!id) {
       throw new NotFoundException('Please provide a userId');
     }
-    return this.repo.findOneBy({ id });
+    return this.prisma.user.findUnique({ where: { id } });
   }
 
-  find(email: string) {
-    return this.repo.findBy({ email });
-  }
-
-  async update(id: number, attrs: Partial<User>) {
+  async findOneOrThrow(id: number) {
     const user = await this.findOne(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('No user was found');
     }
-    Object.assign(user, attrs);
-    return this.repo.save(user);
+    return user;
+  }
+
+  findByEmail(email: string) {
+    if (!email) {
+      throw new NotFoundException('Please provide an email');
+    }
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async findByEmailOrThrow(email: string) {
+    const user = await this.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('No user was found');
+    }
+    return user;
+  }
+
+  async update(id: number, attrs: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data: attrs,
+    });
   }
 
   async remove(id: number) {
-    const user = await this.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return this.repo.remove(user);
+    return this.prisma.user.delete({ where: { id } });
   }
 }

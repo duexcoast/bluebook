@@ -1,15 +1,12 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
-import { User } from './user.entity';
-
+import { PrismaModule } from '../prisma/prisma.module';
 import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [PrismaModule],
   controllers: [UsersController],
   providers: [UsersService, AuthService],
 })

@@ -13,6 +13,7 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    console.log(process.env.NODE_ENV);
   });
 
   it('/ (GET)', () => {
