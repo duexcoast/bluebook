@@ -51,8 +51,8 @@ export class UsersController {
     } catch (err) {
       // if (
       //   err instanceof QueryFailedError &&
-        // this is specific to sqlite - will have to change when
-        // migrating to postgres
+      // this is specific to sqlite - will have to change when
+      // migrating to postgres
       //   err.message.includes('UNIQUE constraint failed')
       // ) {
       //   throw new BadRequestException('email already in use');
@@ -71,9 +71,7 @@ export class UsersController {
 
   @Get('/:id')
   async findUser(@Param('id') id: number) {
-    console.log('handler is running');
-
-    const user = await this.usersService.findOne(id);
+    const user = await this.usersService.findOneOrThrow(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }

@@ -34,7 +34,7 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: PrismaService,
-          useValue: mockDeep<PrismaClient>,
+          useValue: mockDeep<PrismaClient>(),
         },
         {
           provide: UsersService,
@@ -45,7 +45,6 @@ describe('AuthService', () => {
     service = module.get(AuthService);
     prisma = module.get(PrismaService);
   });
-
 
   it('can create an instance of the auth serice', async () => {
     expect(service).toBeDefined();

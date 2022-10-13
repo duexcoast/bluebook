@@ -2,17 +2,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
-import { User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
+import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let fakeUsersService: Partial<UsersService>;
+  let prisma: DeepMockProxy<PrismaClient>;
+  let fakeUsersService;
   let fakeAuthService: Partial<AuthService>;
 
   beforeEach(async () => {
     fakeUsersService = {
-      findByEmailOrThrow: (email: string) => {
+      findByEmail: (email: string) => {
         //
         return Promise.resolve({
           id: 1,
@@ -28,20 +31,8 @@ describe('UsersController', () => {
           password: 'password',
         } as User);
       },
-      // update: (id: number, attrs: Partial<User>) => {
-      //   //
-      //   return Promise.resolve(user);
-      // },
-      // remove: (id: number) => {
-      //   //
-      //   return Promise.resolve(user);
-      // },
     };
     fakeAuthService = {
-      // signup: (email: string, password: string) => {
-      //   //
-      //   return Promise.resolve(user);
-      // },
       signin: (email: string, password: string) => {
         //
         return Promise.resolve({ id: 1, email, password } as User);
@@ -58,10 +49,15 @@ describe('UsersController', () => {
           provide: AuthService,
           useValue: fakeAuthService,
         },
+        {
+          provide: PrismaService,
+          useValue: mockDeep<PrismaClient>(),
+        },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
+    prisma = module.get(PrismaService);
   });
 
   it('should be defined', () => {
@@ -80,7 +76,7 @@ describe('UsersController', () => {
   });
 
   it('findUser throws an error if given user is not found', async () => {
-    fakeUsersService.findOne = () => null;
+    fakeUsersService.findOneOrThrow = () => null;
     await expect(controller.findUser(1)).rejects.toThrow(NotFoundException);
   });
 
