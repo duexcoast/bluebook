@@ -1,7 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-// import { User } from './user.entity';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -33,7 +30,7 @@ export class UsersService {
     if (!email) {
       throw new NotFoundException('Please provide an email');
     }
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findMany({ where: { email } });
   }
 
   async findByEmailOrThrow(email: string) {

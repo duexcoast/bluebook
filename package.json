@@ -30,8 +30,6 @@
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@nestjs/swagger": "^6.1.2",
-    "@nestjs/typeorm": "^9.0.1",
     "@prisma/client": "^4.4.0",
     "@types/cookie-session": "^2.0.44",
     "class-transformer": "^0.5.1",
@@ -42,9 +40,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "slonik": "^31.3.0",
-    "sqlite3": "^5.1.1",
-    "typeorm": "^0.3.10"
+    "sqlite3": "^5.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -60,6 +56,8 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "28.1.2",
+    "jest-cli": "^29.1.2",
+    "jest-mock-extended": "^3.0.1",
     "prettier": "^2.3.2",
     "prisma": "^4.4.0",
     "source-map-support": "^0.5.20",

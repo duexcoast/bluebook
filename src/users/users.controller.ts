@@ -19,7 +19,6 @@ import { UsersService } from './users.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
-import { QueryFailedError } from 'typeorm';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from '@prisma/client';
 import { AuthGuard } from '../guards/auth.guard';
@@ -50,14 +49,14 @@ export class UsersController {
       session.userId = user.id;
       return user;
     } catch (err) {
-      if (
-        err instanceof QueryFailedError &&
+      // if (
+      //   err instanceof QueryFailedError &&
         // this is specific to sqlite - will have to change when
         // migrating to postgres
-        err.message.includes('UNIQUE constraint failed')
-      ) {
-        throw new BadRequestException('email already in use');
-      }
+      //   err.message.includes('UNIQUE constraint failed')
+      // ) {
+      //   throw new BadRequestException('email already in use');
+      // }
       // throw a general error if it's a diff type of err
       throw err;
     }
@@ -82,7 +81,7 @@ export class UsersController {
   }
 
   @Get()
-  findAllUsers(@Query('email') email: string) {
+  findUserByEmail(@Query('email') email: string) {
     return this.usersService.findByEmailOrThrow(email);
   }
 

@@ -1,11 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '@prisma/client';
-import { ApprovedReportDto } from './dtos/apporved-report.dto';
-import { CreateReportDto } from './dtos/create-report.dto';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
-import { Report } from '@prisma/client';
+import { User } from '@prisma/client';
+import { CreateReportDto } from './dtos/create-report.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()

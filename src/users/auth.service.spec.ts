@@ -1,25 +1,26 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { User } from './user.entity';
+import { PrismaClient } from '@prisma/client';
+import { User } from '@prisma/client';
 import { UsersService } from './users.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let fakeUsersService: Partial<UsersService>;
+  let prisma: DeepMockProxy<PrismaClient>;
 
   beforeEach(async () => {
-    // Create a fake copy of the users service
     const users: User[] = [];
-    fakeUsersService = {
-      find: (email: string) => {
-        const filteredUsers = users.filter((user) => user.email === email);
+    const fakeUsersService = {
+      findByEmail: (email: string) => {
+        const filteredUsers = users.filter((users) => users.email === email);
         return Promise.resolve(filteredUsers);
       },
-
       create: (email: string, password: string) => {
         const user = {
-          id: Math.floor(Math.random() ** 999999),
+          id: Math.floor(Math.random() * 9999999),
           email,
           password,
         } as User;
@@ -27,18 +28,24 @@ describe('AuthService', () => {
         return Promise.resolve(user);
       },
     };
-    const module = await Test.createTestingModule({
+
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
+        {
+          provide: PrismaService,
+          useValue: mockDeep<PrismaClient>,
+        },
         {
           provide: UsersService,
           useValue: fakeUsersService,
         },
       ],
     }).compile();
-
     service = module.get(AuthService);
+    prisma = module.get(PrismaService);
   });
+
 
   it('can create an instance of the auth serice', async () => {
     expect(service).toBeDefined();
@@ -53,7 +60,7 @@ describe('AuthService', () => {
   });
 
   // TODO: how to test when error is being thrown by route handler?
-  // it('throws an error if user signs up with email that is in use', async () => {
+  // it.todo('throws an error if user signs up with email that is in use', async () => {
   //   await service.signup('test@test.com', 'password');
   //   expect.assertions(1);
 
@@ -63,13 +70,17 @@ describe('AuthService', () => {
   // });
 
   it('throws if signin is called with an email that doesnt exist', async () => {
-    expect.assertions(2);
-    try {
-      await service.signin('test@wrong.com', 'password');
-    } catch (err) {
-      expect(err).toBeInstanceOf(NotFoundException);
-      expect(err.message).toEqual('User not found');
-    }
+    // expect.assertions(2);
+
+    await expect(service.signin('test@wrong.com', 'password')).rejects.toThrow(
+      NotFoundException,
+    );
+    // try {
+    //   await service.signin('test@wrong.com', 'password');
+    // } catch (err) {
+    //   expect(err).toBeInstanceOf(NotFoundException);
+    //   expect(err.message).toEqual('User not found');
+    // }
   });
 
   it('throws if an invalid password is provided', async () => {

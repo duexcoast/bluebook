@@ -17,7 +17,8 @@ export class AuthService {
     // See if email is in use. Error will be thrown by
     // unique constraint on User Entity and caught by route handler
     const users = await this.usersService.findByEmail(email);
-    if (users) {
+    if (users.length) {
+      console.log(users);
       throw new BadRequestException(
         'email already in use -- thrown in auth ser',
       );
@@ -40,7 +41,7 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
-    const user = await this.usersService.findByEmailOrThrow(email);
+    const [user] = await this.usersService.findByEmail(email);
     if (!user) {
       throw new NotFoundException('User not found -- auth service');
     }
