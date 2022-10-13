@@ -14,13 +14,14 @@ export class AuthService {
   constructor(private usersService: UsersService) {}
 
   async signup(email: string, password: string) {
-    // See if email is in use. Error will be thrown by 
+    // See if email is in use. Error will be thrown by
     // unique constraint on User Entity and caught by route handler
     const users = await this.usersService.findByEmail(email);
     if (users) {
-      throw new BadRequestException('email already in use -- thrown in auth ser')
+      throw new BadRequestException(
+        'email already in use -- thrown in auth ser',
+      );
     }
-
 
     // Generate a salt
     const salt = randomBytes(8).toString('hex');
@@ -39,7 +40,7 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmailOrThrow(email);
     if (!user) {
       throw new NotFoundException('User not found -- auth service');
     }

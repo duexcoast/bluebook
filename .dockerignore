@@ -1,42 +1,10 @@
-/node_modules
+# NPM
+node_modules
+npm-debug.log
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+#Ignore git and cache folders
+.git
+.cache
 
-# OS
-.DS_Store
-
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# Env variables
-.env
-.env.dev
-.env.test
-.env.*
-
-# Test DBS
-*.sqlite
+# Ignore Environment variables
+.env*

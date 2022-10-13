@@ -3,7 +3,7 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "neww@user.com",
+    "email": "new@user.com",
     "password": "admin"
 }
 
@@ -12,8 +12,8 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "c@z.com",
-    "password": "password"
+    "email": "new@user.com",
+    "password": "admin"
 }
 
 ### Sign out
@@ -41,12 +41,6 @@ Content-Type: application/json
     "password": "admin"
 }
 
-### Set color property on session object
-GET http://localhost:3000/auth/colors/purple
-
-### Get color property on session object
-GET http://localhost:3000/auth/colors
-
 ### Create a vehicle report
 POST http://localhost:3000/reports
 Content-Type: application/json
@@ -63,7 +57,7 @@ Content-Type: application/json
 }
 
 ### Approve a vehicle report
-PATCH http://localhost:3000/reports/10
+PATCH http://localhost:3000/reports/1
 Content-Type: application/json
 
 {

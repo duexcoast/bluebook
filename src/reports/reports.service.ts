@@ -23,35 +23,43 @@ export class ReportsService {
     });
   }
 
-  createEstimate({ make, model, lng, lat, year, mileage }: GetEstimateDto) {
-    return this.repo
-      .createQueryBuilder()
-      .select('AVG(price)', 'price')
-      .where('make = :make', { make })
-      .andWhere('model = :model', { model })
-      .andWhere('lng - :lng BETWEEN -5 AND 5', { lng })
-      .andWhere('lat - :lat BETWEEN -5 AND 5', { lat })
-      .andWhere('year - :year BETWEEN -3 AND 3', { year })
-      .andWhere('approved IS TRUE')
-      .orderBy('ABS(mileage - :mileage)', 'DESC')
-      .setParameters({ mileage })
-      .limit(3)
-      .getRawOne();
-  }
+  // createEstimate({ make, model, lng, lat, year, mileage }: GetEstimateDto) {
+  //   return this.repo
+  //     .createQueryBuilder()
+  //     .select('AVG(price)', 'price')
+  //     .where('make = :make', { make })
+  //     .andWhere('model = :model', { model })
+  //     .andWhere('lng - :lng BETWEEN -5 AND 5', { lng })
+  //     .andWhere('lat - :lat BETWEEN -5 AND 5', { lat })
+  //     .andWhere('year - :year BETWEEN -3 AND 3', { year })
+  //     .andWhere('approved IS TRUE')
+  //     .orderBy('ABS(mileage - :mileage)', 'DESC')
+  //     .setParameters({ mileage })
+  //     .limit(3)
+  //     .getRawOne();
+  // }
 
   findOne(id: number) {
     if (!id) {
       throw new NotFoundException('Please provide a report id');
     }
-    return this.repo.findOneBy({ id });
+    return this.prisma.report.findUnique({ where: { id } });
+  }
+
+  async findOneOrThrow(id: number) {
+    const report = await this.findOne(id);
+    if (!report) {
+      throw new NotFoundException('No report was found');
+    }
+    return report;
   }
 
   async changeApproval(id: number, approved: boolean) {
-    const report = await this.findOne(id);
-    if (!report) {
-      throw new NotFoundException('report not found');
-    }
-    report.approved = approved;
-    return this.repo.save(report);
+    return this.prisma.report.update({
+      where: { id },
+      data: {
+        approved,
+      },
+    });
   }
 }

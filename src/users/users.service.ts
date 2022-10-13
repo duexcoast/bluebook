@@ -45,10 +45,14 @@ export class UsersService {
   }
 
   async update(id: number, attrs: UpdateUserDto) {
-    return this.prisma.user.update({
+    const updatedReport = await this.prisma.user.update({
       where: { id },
       data: attrs,
     });
+    if (!updatedReport) {
+      throw new NotFoundException('Could no locate a user with that id')
+    }
+    return updatedReport
   }
 
   async remove(id: number) {
